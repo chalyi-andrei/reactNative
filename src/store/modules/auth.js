@@ -11,6 +11,7 @@ const SIGN_UP_FAILURE = 'auth/SIGN_UP_FAILURE';
 
 const initialState = {
   auth: {
+    login: null,
     email: null,
     password: null,
     error: null,
@@ -29,6 +30,7 @@ export default function authReducer(state = initialState, action: Object) {
         ...initialState,
         auth: {
           ...initialState.auth,
+          login: action.user.login,
           email: action.user.email,
           password: action.user.password,
         }
@@ -36,6 +38,7 @@ export default function authReducer(state = initialState, action: Object) {
     };
 
     case SIGN_UP_FAILURE:
+      console.log('reducer error', action)
       return {
         ...state,
         auth: {
@@ -49,10 +52,17 @@ export default function authReducer(state = initialState, action: Object) {
   }
 }
 
-export function login({email, password}) {
+export function login({login, email, password}) {
   return {
     type: SET_USER,
-    user: {email, password},
+    user: {login, email, password,},
+  };
+}
+
+export function loginFail(error: Object) {
+  return {
+    type: SIGN_UP_FAILURE,
+    error,
   };
 }
 

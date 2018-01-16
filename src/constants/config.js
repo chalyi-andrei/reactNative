@@ -1,5 +1,5 @@
 // @flow
 
 export default {
-  baseURL: 'https://reqres.in/api',
+  baseURL: 'https://favqs.com/api',
 };

@@ -4,20 +4,22 @@ import { takeEvery, put, select } from 'redux-saga/effects';
 import { Platform, AsyncStorage } from 'react-native';
 
 import api from '../../api';
-import notify from '../../helpers/notify';
+import { SET_USER, SIGN_UP_SUCCESS, LOGOUT, loginFail } from '../modules/auth';
 
-import { SET_USER, SIGN_UP_SUCCESS, LOGOUT } from '../modules/auth';
+const AUTH_TOKEN_KEY = 'f421e36be8451675a508fabf73f23dc1';
 
-const AUTH_TOKEN_KEY = '@test:authToken';
-
+const loginSelector = state => state.auth.auth.login;
 const emailSelector = state => state.auth.auth.email;
 const passwordSelector = state => state.auth.auth.password;
 
 function* register() {
   try {
+    const login = yield select(loginSelector);
     const email = yield select(emailSelector);
     const password = yield select(passwordSelector);
-    const result = yield api().auth.login({email, password});
+    const result = yield api().auth.login({
+      user: {login, email, password},
+    });
 
     yield put({ type: SIGN_UP_SUCCESS, result });
 
@@ -31,8 +33,7 @@ function* register() {
       actions: [NavigationActions.navigate({ routeName: 'Users' })],
     }));
   } catch (err) {
-    console.log('saga error', err)
-    // yield put(authCodeFail(err.response.data));
+    yield put(loginFail(err));
   }
 }
 

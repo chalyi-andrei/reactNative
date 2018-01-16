@@ -10,7 +10,6 @@ class Client {
   token: ?string;
   req: ReqType;
   // modules
-  exampleBind: *;
   users: *;
   auth: *;
 
@@ -18,6 +17,7 @@ class Client {
     this.req = axios.create({
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
+        "Authorization": "Token token='f421e36be8451675a508fabf73f23dc1'"
       },
       baseURL,
     });
