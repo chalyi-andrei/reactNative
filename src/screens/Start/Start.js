@@ -5,19 +5,27 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import validator from 'validator';
 
-import type { SomeState } from '../../store/modules/example'
-import { login } from '../../store/modules/auth'
+import { login } from '../../store/modules/auth';
 
 
 import styles from './styles';
 
 
-type Props = {
-  example: SomeState,
-  login: login,
+type PropsT = {
+  login: typeof login,
 };
 
-class Home extends Component<Props> {
+type StateT = {
+  data: {
+    email: ?string,
+    password: ?string,
+  },
+  fieldsIsValid: {
+    email: boolean
+  },
+};
+
+class Home extends Component<PropsT, StateT> {
   state = {
     data: {
       email: '',
@@ -25,10 +33,10 @@ class Home extends Component<Props> {
     },
     fieldsIsValid: {
       email: false,
-    }
+    },
   };
 
-  setInputValue = (key, value) => {
+  setInputValue = (key: string, value) => {
     this.setState({
       data: {
         ...this.state.data,
@@ -36,7 +44,7 @@ class Home extends Component<Props> {
       },
       fieldsIsValid: {
         ...this.state.fieldsIsValid,
-        [key]: validator.isEmail(value)
+        [key]: validator.isEmail(value),
       },
     });
   }
@@ -47,11 +55,11 @@ class Home extends Component<Props> {
       return false;
     };
 
-    this.props.login({email: data.email, password: data.password})
+    this.props.login({ email: data.email, password: data.password });
   };
 
   render() {
-  const { data: {email: userEmail, password: userPassword}, fieldsIsValid } = this. state;
+    const { data: {email: userEmail, password: userPassword}, fieldsIsValid } = this.state;
 
     return (
       <View style={{flex: 1, backgroundColor: '#fff'}}>
@@ -82,15 +90,16 @@ class Home extends Component<Props> {
           </View>
           <View style={styles.row}>
             <TouchableOpacity
-              onPress={this.login} style={styles.loginBtn}
-              disabled={!fieldsIsValid.email}>
+              onPress={this.login}
+              style={styles.loginBtn}
+              disabled={!fieldsIsValid.email}
+            >
               <Text style={styles.loginText}>Sign up</Text>
             </TouchableOpacity>
           </View>
         </View>
       </View>
-    )
-
+    );
   }
 }
 
